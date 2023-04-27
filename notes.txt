@@ -1,0 +1,7 @@
+installed libraries:
+
+fastapi
+sqlalchemy ----------can't use async requests, use only for db requests
+databases ----------uses for async requests to db
+databases[postgresql] ----------postgresql wrapper for databases
+psycopg2 ----------adapter library for postgresql connection
