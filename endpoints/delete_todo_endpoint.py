@@ -4,7 +4,11 @@
         Exception: _description_
 
     Returns:
-        JSON: JSON
+        JSON: {
+            pagesCount: int
+            activeTodosCount: int
+            todosTotalCount: int
+        }
     """
 from fastapi.responses import JSONResponse
 from database.session import db

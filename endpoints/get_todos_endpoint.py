@@ -1,3 +1,8 @@
+"""get todos endpoint
+
+    Returns:
+        JSON: list of todos and pagination data dict
+    """
 from database.session import db
 from database.basemodel import Todo
 from fastapi.responses import JSONResponse
@@ -6,6 +11,14 @@ from utils.get_find_arg import get_find_arg
 
 
 async def get_todos(filterValue: str, pageNumber: int):
+    """get todos endpoint
+
+    Args:
+        filterValue (str): value of the filter, got from the query srting
+        pageNumber (int): value of the page number, got from the query string
+
+    Returns:
+        JSON: list of todos and pagination data dict    """
     try:
         find_arg = get_find_arg(filterValue)
 

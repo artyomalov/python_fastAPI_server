@@ -1,3 +1,12 @@
+"""delete all todos endpoint
+
+    Raises:
+        Exception: server error
+
+    Returns:
+       JSON: list of todos and pagination data
+    """
+
 from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
@@ -6,6 +15,17 @@ from utils.get_find_arg import get_find_arg
 
 
 def delete_all_completed_todos(filterValue: str):
+    """delete all todos endpoint
+
+    Args:
+        filterValue (str): value of the filter that got from the query string
+    Raises:
+        Exception: server error
+
+    Returns:
+        JSON: list of todos and pagination data
+    """
+
     try:
         result = db.query(Todo).filter(Todo.completed == True).delete(
             synchronize_session='fetch')

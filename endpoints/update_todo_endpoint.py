@@ -1,20 +1,14 @@
+"""update edpoint for todo API
+    Returns:
+    JSON: list of todos and pagination data
+"""
 from fastapi import Body
 from fastapi.responses import JSONResponse
 from database.basemodel import Todo
 from database.session import db
 
 
-# class DeleteTodoRequestBody(BaseModel):
-#     """Base model for request body
-
-#     Args:
-#         BaseModel (_type_): _description_
-#     """
-#     prop: str
-#     value: bool
-
-
-def update_todo(id: int, pageNumber: int, filterValue: str, body=Body()):
+def update_todo(id: int, body=Body()):
     """update edpoint for todo API
 
     Args:
@@ -23,7 +17,7 @@ def update_todo(id: int, pageNumber: int, filterValue: str, body=Body()):
         filterValue (str): filter value that got from  query string
         body (DeleteTodoRequestBody): request body
     Returns:
-        JSON: data
+        JSON: list of todos and pagination data
     """
     try:
         updating_todo_prop = body['prop']

@@ -4,7 +4,7 @@
         Exception: _description_
 
     Returns:
-        _type_: JSON
+        JSON: added todo and pagination data dict
     """
 
 from fastapi.responses import JSONResponse

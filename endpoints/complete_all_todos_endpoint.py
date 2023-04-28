@@ -1,3 +1,20 @@
+"""delete all completed todos endpoint
+
+    Returns:
+        JSON: deleted todo: {
+        id: int
+        text: str
+        completed: bool
+    },
+    {
+        'todosTotalCount': int
+        'activeTodosCount': int
+        'pagesCount': int
+        'someTodosCompleted': bool
+        'completed': bool
+        }
+    """
+
 from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
@@ -6,6 +23,21 @@ from utils.get_find_arg import get_find_arg
 
 
 def complete_all_todos(filterValue: str):
+    """delete all completed todos endpoint
+
+    Args:
+        filterValue (str): value of the filter that got from the query string
+
+    Returns:
+        JSON: todo, that has been deleted and pagination data:
+            {
+            'todosTotalCount': int
+            'activeTodosCount': int
+            'pagesCount': int
+            'someTodosCompleted': bool
+            'completed': bool
+            }
+    """
     try:
         result = db.query(Todo).filter(Todo.completed == False).update(
             {"completed": True}, synchronize_session='fetch')
