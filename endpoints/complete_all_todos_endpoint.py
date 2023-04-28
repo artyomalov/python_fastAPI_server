@@ -44,7 +44,7 @@ def complete_all_todos(filterValue: str):
         db.commit()
 
         find_arg = get_find_arg(filter_value=filterValue)
-
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>", find_arg)
         if not result:
             result = db.query(Todo).filter(Todo.completed == True).update(
                 {'completed': False}, synchronize_session='fetch')
@@ -64,9 +64,10 @@ def complete_all_todos(filterValue: str):
             }
 
             todos_response = db.query(Todo).filter(Todo.completed == find_arg).offset(
-                todos_count_data['skip_counter']*5).limit(10).all()
+                todos_count_data['skip_counter']*5).limit(10).all() if find_arg != None\
+                else db.query(Todo).offset(todos_count_data['skip_counter']*5).limit(10).all()
 
-            todos = [{'id': todo.id, 'text': todo.text,
+            todos = [{'_id': todo.id, 'text': todo.text,
                       'completed': todo.completed} for todo in todos_response]
 
             return {
@@ -88,10 +89,11 @@ def complete_all_todos(filterValue: str):
             'completed': True
         }
 
-        todos_response = db.query(Todo).filter(Todo.completed == find_arg).offset(
-            todos_count_data['skip_counter']*5).limit(10).all()
+        todos_response = db.query(Todo).order_by(Todo.id.desc()).filter(Todo.completed == find_arg).offset(
+            todos_count_data['skip_counter']*5).limit(10).all() if find_arg != None\
+            else db.query(Todo).offset(todos_count_data['skip_counter']*5).limit(10).all()
 
-        todos = [{'id': todo.id, 'text': todo.text,
+        todos = [{'_id': todo.id, 'text': todo.text,
                   'completed': todo.completed} for todo in todos_response]
 
         return {

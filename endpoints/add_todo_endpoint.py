@@ -20,6 +20,7 @@ class AddTodoRequestBody(BaseModel):
     Args:
         BaseModel (_type_): inhetritade class
     """
+
     text: str
 
 
@@ -37,6 +38,7 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
     Returns:
         _type_: _description_
     """
+    print(body.text)
     try:
         todo_request = Todo(text=body.text, completed=False)
         db.add(todo_request)
@@ -48,15 +50,19 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
         todos_count_data = calculate_pages_count(filter_value=filterValue,
                                                  page_number=pageNumber, data_base=db, model=Todo)
         pagination_data = {
-            'todos_total_count': todos_count_data['todos_total_count'],
-            'active_todos_count': todos_count_data['active_todos_count'],
-            'pages_count': todos_count_data['pages_count'],
+            'todosTotalCount': todos_count_data['todos_total_count'],
+            'activeTodosCount': todos_count_data['active_todos_count'],
+            'pagesCount': todos_count_data['pages_count'],
         }
         new_todo = {
-            'id': todo_request.id,
+            '_id': todo_request.id,
             'text': todo_request.text,
             'completed': todo_request.completed,
         }
+
+        print(new_todo)
+        print(pagination_data)
+
         return JSONResponse({'returnedTodo': new_todo, 'paginationData': pagination_data})
 
     except Exception as err:

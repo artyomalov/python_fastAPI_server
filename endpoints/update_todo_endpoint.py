@@ -27,7 +27,7 @@ def update_todo(id: int, body=Body()):
         db.commit()
 
         returned_todo = {
-            'id': returned_todo_query.id,
+            '_id': returned_todo_query.id,
             'text': returned_todo_query.text,
             'completed': returned_todo_query.completed
         }
@@ -38,6 +38,6 @@ def update_todo(id: int, body=Body()):
             'activeTodosCount': active_todos_count
         }
 
-        return JSONResponse({'returnedTodo': returned_todo, 'pagination_data': pagination_data})
+        return JSONResponse({'returnedTodo': returned_todo, 'paginationData': pagination_data})
     except Exception as err:
         return JSONResponse({'error': err}, status_code=500)
