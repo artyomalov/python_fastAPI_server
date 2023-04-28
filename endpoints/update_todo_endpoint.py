@@ -21,7 +21,8 @@ def update_todo(id: int, body=Body()):
     """
     try:
         updating_todo_prop = body['prop']
-        updating_todo_value = not body['value'] if body['prop'] == 'completed' else body['value']
+        updating_todo_value = not body['value'] if body['prop'] == 'completed'\
+            else body['value']
         returned_todo_query = db.get(Todo, id)
         setattr(returned_todo_query, updating_todo_prop, updating_todo_value)
         db.commit()
@@ -31,13 +32,16 @@ def update_todo(id: int, body=Body()):
             'text': returned_todo_query.text,
             'completed': returned_todo_query.completed
         }
-        print(returned_todo)
+
         active_todos_count = db.query(Todo).filter(
             Todo.completed is False).count()
         pagination_data = {
             'activeTodosCount': active_todos_count
         }
 
-        return JSONResponse({'returnedTodo': returned_todo, 'paginationData': pagination_data})
+        return JSONResponse({
+            'returnedTodo': returned_todo,
+            'paginationData': pagination_data
+        })
     except Exception as err:
         return JSONResponse({'error': err}, status_code=500)

@@ -41,14 +41,20 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
     print(body.text)
     try:
         todo_request = Todo(text=body.text, completed=False)
+
         db.add(todo_request)
         db.commit()
         db.refresh(todo_request)
+
         if not todo_request:
             raise Exception('DB error')
 
-        todos_count_data = calculate_pages_count(filter_value=filterValue,
-                                                 page_number=pageNumber, data_base=db, model=Todo)
+        todos_count_data = calculate_pages_count(
+            filter_value=filterValue,
+            page_number=pageNumber,
+            data_base=db,
+            model=Todo)
+
         pagination_data = {
             'todosTotalCount': todos_count_data['todos_total_count'],
             'activeTodosCount': todos_count_data['active_todos_count'],
@@ -63,7 +69,12 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
         print(new_todo)
         print(pagination_data)
 
-        return JSONResponse({'returnedTodo': new_todo, 'paginationData': pagination_data})
+        return JSONResponse(
+            {
+                'returnedTodo': new_todo,
+                'paginationData': pagination_data
+            }
+        )
 
     except Exception as err:
         return err

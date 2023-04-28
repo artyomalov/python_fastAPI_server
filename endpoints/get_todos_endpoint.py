@@ -23,8 +23,12 @@ async def get_todos(filterValue: str, pageNumber: int):
     try:
         find_arg = get_find_arg(filterValue)
 
-        todos_count_data = calculate_pages_count(filter_value=filterValue,
-                                                 page_number=pageNumber, data_base=db, model=Todo)
+        todos_count_data = calculate_pages_count(
+            filter_value=filterValue,
+            page_number=pageNumber,
+            data_base=db,
+            model=Todo
+        )
 
         some_todos_completed = todos_count_data['todos_total_count'] - \
             todos_count_data['active_todos_count'] > 0
@@ -40,19 +44,26 @@ async def get_todos(filterValue: str, pageNumber: int):
             todos_response = db.query(Todo).order_by(Todo.id.desc()).offset(
                 todos_count_data['skip_counter']*5).limit(10).all()
 
-            todos = [{'_id': todo.id, 'text': todo.text,
-                      'completed': todo.completed} for todo in todos_response]
-            print(todos)
+            todos = [{
+                '_id': todo.id,
+                'text': todo.text,
+                'completed': todo.completed
+            } for todo in todos_response]
+
             return JSONResponse({
                 'todos': todos,
                 'paginationData': pagination_data
             })
 
-        todos_response = db.query(Todo).order_by(Todo.id.desc()).filter(Todo.completed == find_arg).offset(
+        todos_response = db.query(Todo).order_by(Todo.id.desc())\
+            .filter(Todo.completed == find_arg).offset(
             todos_count_data['skip_counter']*5).limit(10).all()
 
-        todos = [{'_id': todo.id, 'text': todo.text,
-                  'completed': todo.completed} for todo in todos_response]
+        todos = [{
+            '_id': todo.id,
+            'text': todo.text,
+            'completed': todo.completed
+        } for todo in todos_response]
         return JSONResponse({
             'todos': todos,
             'paginationData': pagination_data

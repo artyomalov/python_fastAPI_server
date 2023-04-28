@@ -35,13 +35,18 @@ def delete_todo(id: int):
     """
     try:
         deleted_todo = db.get(Todo, id)
+
         if not deleted_todo:
             raise Exception('db error, no such todo')
         db.delete(deleted_todo)
         db.commit()
 
-        todos_count_data = calculate_pages_count(filter_value='all',
-                                                 page_number=1, data_base=db, model=Todo)
+        todos_count_data = calculate_pages_count(
+            filter_value='all',
+            page_number=1,
+            data_base=db,
+            model=Todo
+        )
 
         return JSONResponse({
             'pagesCount': todos_count_data['pages_count'],

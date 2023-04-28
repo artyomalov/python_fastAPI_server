@@ -63,12 +63,16 @@ def complete_all_todos(filterValue: str):
                 'completed': False
             }
 
-            todos_response = db.query(Todo).filter(Todo.completed == find_arg).offset(
-                todos_count_data['skip_counter']*5).limit(10).all() if find_arg != None\
+            todos_response = db.query(Todo).order_by(Todo.id.desc()).\
+                filter(Todo.completed == find_arg).offset(todos_count_data['skip_counter']*5).limit(10).all()\
+                if find_arg != None\
                 else db.query(Todo).offset(todos_count_data['skip_counter']*5).limit(10).all()
 
-            todos = [{'_id': todo.id, 'text': todo.text,
-                      'completed': todo.completed} for todo in todos_response]
+            todos = [{
+                '_id': todo.id,
+                'text': todo.text,
+                'completed': todo.completed
+            } for todo in todos_response]
 
             return {
                 'todos': todos,
@@ -76,7 +80,11 @@ def complete_all_todos(filterValue: str):
             }
 
         todos_count_data = calculate_pages_count(
-            filter_value=filterValue, page_number=1, data_base=db, model=Todo)
+            filter_value=filterValue,
+            page_number=1,
+            data_base=db,
+            model=Todo
+        )
 
         some_todos_completed = todos_count_data['todos_total_count'] - \
             todos_count_data['active_todos_count'] > 0
@@ -89,12 +97,17 @@ def complete_all_todos(filterValue: str):
             'completed': True
         }
 
-        todos_response = db.query(Todo).order_by(Todo.id.desc()).filter(Todo.completed == find_arg).offset(
-            todos_count_data['skip_counter']*5).limit(10).all() if find_arg != None\
+        todos_response = db.query(Todo).order_by(Todo.id.desc())\
+            .filter(Todo.completed == find_arg)\
+            .offset(todos_count_data['skip_counter']*5).limit(10).all()\
+            if find_arg != None\
             else db.query(Todo).offset(todos_count_data['skip_counter']*5).limit(10).all()
 
-        todos = [{'_id': todo.id, 'text': todo.text,
-                  'completed': todo.completed} for todo in todos_response]
+        todos = [{
+            '_id': todo.id,
+            'text': todo.text,
+            'completed': todo.completed
+        } for todo in todos_response]
 
         return {
             'todos': todos,
