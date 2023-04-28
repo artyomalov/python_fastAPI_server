@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
-from pydantic import BaseModel
+from exceptions.custom_exeption import CustomException
 
 
 def delete_todo(id: int):
@@ -37,7 +37,7 @@ def delete_todo(id: int):
         deleted_todo = db.get(Todo, id)
 
         if not deleted_todo:
-            raise Exception('db error, no such todo')
+            raise CustomException('db error, no such todo', )
         db.delete(deleted_todo)
         db.commit()
 
@@ -54,5 +54,6 @@ def delete_todo(id: int):
             'todosTotalCount': todos_count_data['todos_total_count']
         })
 
-    except Exception as err:
-        return JSONResponse({'error': err}, status_code=500)
+    except CustomException as err:
+        error = err.db_error()
+        return JSONResponse({'error': error['error']}, status_code=err['status_code'])

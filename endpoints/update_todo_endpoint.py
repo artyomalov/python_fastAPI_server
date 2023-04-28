@@ -21,10 +21,15 @@ def update_todo(id: int, body=Body()):
     """
     try:
         updating_todo_prop = body['prop']
-        updating_todo_value = not body['value'] if body['prop'] == 'completed'\
+        updating_todo_value = not body['value'] if body['prop'] == 'completed' \
             else body['value']
         returned_todo_query = db.get(Todo, id)
-        setattr(returned_todo_query, updating_todo_prop, updating_todo_value)
+
+        setattr(
+            returned_todo_query,
+            updating_todo_prop,
+            updating_todo_value
+        )
         db.commit()
 
         returned_todo = {

@@ -1,6 +1,6 @@
 """main file of the app
     """
-# import uvicorn
+import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from database.session import engine
@@ -24,8 +24,8 @@ app.add_middleware(
 app.include_router(todo_router)
 
 
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="127.0.0.1", port=8000)
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
 # # @app.on_event("startup")
 # async def startup():

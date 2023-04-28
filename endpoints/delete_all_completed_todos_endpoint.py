@@ -36,7 +36,11 @@ def delete_all_completed_todos(filterValue: str):
         find_arg = get_find_arg(filter_value=filterValue)
 
         todos_count_data = calculate_pages_count(
-            filter_value=filterValue, page_number=1, data_base=db, model=Todo)
+            filter_value=filterValue,
+            page_number=1,
+            data_base=db,
+            model=Todo
+        )
 
         some_todos_completed = todos_count_data['todos_total_count'] - \
             todos_count_data['active_todos_count'] > 0

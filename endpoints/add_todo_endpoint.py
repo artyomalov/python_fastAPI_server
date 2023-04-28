@@ -11,17 +11,7 @@ from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
-from pydantic import BaseModel
-
-
-class AddTodoRequestBody(BaseModel):
-    """Base model for request body
-
-    Args:
-        BaseModel (_type_): inhetritade class
-    """
-
-    text: str
+from models.Add_todo_request_body import AddTodoRequestBody
 
 
 def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
@@ -47,7 +37,7 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
         db.refresh(todo_request)
 
         if not todo_request:
-            raise Exception('DB error')
+            raise CustomException('DB error', 501, )
 
         todos_count_data = calculate_pages_count(
             filter_value=filterValue,
@@ -78,3 +68,9 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
 
     except Exception as err:
         return err
+
+    # try:
+    #     raise "Fuck"
+    # except CustomException as error:
+    #     # hadnle it
+    # except Exception as err:

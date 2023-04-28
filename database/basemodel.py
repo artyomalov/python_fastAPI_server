@@ -5,8 +5,6 @@ from sqlalchemy import Column, Integer, String, Boolean
 # base model
 Base = declarative_base()
 
-# person inherits base model through base
-
 
 class Todo(Base):
     __tablename__ = "todos"
