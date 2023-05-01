@@ -7,11 +7,12 @@ from database.session import db
 from database.basemodel import Todo
 from fastapi.responses import JSONResponse
 from sqlalchemy import desc
+from const import LIMIT, OFFSET_SIZE
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
 
 
-async def get_todos(filterValue: str, pageNumber: int):
+def get_todos(filterValue: str, pageNumber: int):
     """get todos endpoint
 
     Args:
@@ -21,8 +22,8 @@ async def get_todos(filterValue: str, pageNumber: int):
     Returns:
         JSON: list of todos and pagination data dict    """
     try:
-        find_arg = get_find_arg(filterValue)
 
+        find_arg = get_find_arg(filterValue)
         todos_count_data = calculate_pages_count(
             filter_value=filterValue,
             page_number=pageNumber,
@@ -40,24 +41,12 @@ async def get_todos(filterValue: str, pageNumber: int):
             'someTodosCompleted': some_todos_completed
         }
 
-        if find_arg == None:
-            todos_response = db.query(Todo).order_by(Todo.id.desc()).offset(
-                todos_count_data['skip_counter']*5).limit(10).all()
-
-            todos = [{
-                '_id': todo.id,
-                'text': todo.text,
-                'completed': todo.completed
-            } for todo in todos_response]
-
-            return JSONResponse({
-                'todos': todos,
-                'paginationData': pagination_data
-            })
-
-        todos_response = db.query(Todo).order_by(Todo.id.desc())\
-            .filter(Todo.completed == find_arg).offset(
-            todos_count_data['skip_counter']*5).limit(10).all()
+        todos_response = get_todos(
+            find_arg=find_arg,
+            data_base=db,
+            model=Todo,
+            skip_counter=todos_count_data['skip_counter']
+        )
 
         todos = [{
             '_id': todo.id,

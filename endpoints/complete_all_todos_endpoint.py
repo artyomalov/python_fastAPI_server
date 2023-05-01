@@ -20,8 +20,7 @@ from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
-from const import OFFSET_SIZE
-
+from utils.get_todos import get_todos
 
 def complete_all_todos(filterValue: str):
     """delete all completed todos endpoint
@@ -40,59 +39,21 @@ def complete_all_todos(filterValue: str):
             }
     """
     try:
+        find_arg = get_find_arg(filter_value=filterValue)
+
+
         result = db.query(Todo).filter(Todo.completed == False).update(
             {"completed": True}, synchronize_session='fetch')
         db.commit()
+        completed = True
 
-        find_arg = get_find_arg(filter_value=filterValue)
-
+        
         if not result:
             result = db.query(Todo).filter(Todo.completed == True).update(
                 {'completed': False}, synchronize_session='fetch')
+            db.commit()
+            completed = False
 
-            todos_count_data = calculate_pages_count(
-                filter_value=filterValue,
-                page_number=1,
-                data_base=db,
-                model=Todo
-            )
-
-            some_todos_completed = todos_count_data['todos_total_count'] - \
-                todos_count_data['active_todos_count'] > 0
-
-            pagination_data = {
-                'todosTotalCount': todos_count_data['todos_total_count'],
-                'activeTodosCount': todos_count_data['active_todos_count'],
-                'pagesCount': todos_count_data['pages_count'],
-                'someTodosCompleted': some_todos_completed,
-                'completed': False
-            }
-
-            # todos_response = db.query(Todo)
-            # if find_arg is not None:
-            #     todos_response = todos_response.order_by(Todo.id.desc()). \
-            #         filter(Todo.completed == find_arg)
-            # todos_response = todos_response.offset(todos_count_data['skip_counter']*OFFSET_SIZE) \
-            # .limit(10).all()
-
-            if find_arg is not None:
-                todos_response = db.query(Todo).order_by(Todo.id.desc()). \
-                    filter(Todo.completed == find_arg)\
-                    .offset(todos_count_data['skip_counter']*OFFSET_SIZE).limit(10).all()
-            else:
-                todos_response = db.query(Todo).offset(todos_count_data['skip_counter']*OFFSET_SIZE) \
-                    .limit(10).all()
-
-            todos = [{
-                '_id': todo.id,
-                'text': todo.text,
-                'completed': todo.completed
-            } for todo in todos_response]
-
-            return {
-                'todos': todos,
-                'paginationData': pagination_data
-            }
 
         todos_count_data = calculate_pages_count(
             filter_value=filterValue,
@@ -100,29 +61,31 @@ def complete_all_todos(filterValue: str):
             data_base=db,
             model=Todo
         )
-
         some_todos_completed = todos_count_data['todos_total_count'] - \
             todos_count_data['active_todos_count'] > 0
+
+
+        todos_response = get_todos(
+            find_arg=find_arg,
+            data_base=db,
+            model=Todo,
+            skip_counter=todos_count_data['skip_counter']
+        )
+
 
         pagination_data = {
             'todosTotalCount': todos_count_data['todos_total_count'],
             'activeTodosCount': todos_count_data['active_todos_count'],
             'pagesCount': todos_count_data['pages_count'],
             'someTodosCompleted': some_todos_completed,
-            'completed': True
+            'completed': completed
         }
-
-        todos_response = db.query(Todo).order_by(Todo.id.desc())\
-            .filter(Todo.completed == find_arg)\
-            .offset(todos_count_data['skip_counter']*5).limit(10).all()\
-            if find_arg != None\
-            else db.query(Todo).offset(todos_count_data['skip_counter']*5).limit(10).all()
-
         todos = [{
             '_id': todo.id,
             'text': todo.text,
             'completed': todo.completed
         } for todo in todos_response]
+
 
         return {
             'todos': todos,

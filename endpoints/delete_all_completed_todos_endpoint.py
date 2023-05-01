@@ -10,6 +10,8 @@
 from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
+from endpoints.get_todos_endpoint import get_todos
+from exceptions.custom_exeption import CustomException
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
 
@@ -31,7 +33,7 @@ def delete_all_completed_todos(filterValue: str):
             synchronize_session='fetch')
         db.commit()
         if not result:
-            raise Exception('DB error')
+            raise CustomException('DB error')
 
         find_arg = get_find_arg(filter_value=filterValue)
 
@@ -52,11 +54,12 @@ def delete_all_completed_todos(filterValue: str):
             'someTodosCompleted': some_todos_completed
         }
 
-        todos_response = db.query(Todo).order_by(Todo.id.desc())\
-            .filter(Todo.completed == find_arg).offset(
-            todos_count_data['skip_counter']*5).limit(10).all() \
-            if find_arg != None else db.query(Todo).order_by(Todo.id.desc())\
-            .offset(todos_count_data['skip_counter']*5).limit(10).all()
+        todos_response = get_todos(
+            find_arg=find_arg,
+            data_base=db,
+            model=Todo,
+            skip_counter=todos_count_data['skip_counter']
+        )
 
         todos = [{
             '_id': todo.id,
@@ -70,6 +73,7 @@ def delete_all_completed_todos(filterValue: str):
             'todos': todos,
             'paginationData': pagination_data
         }
-
+    except CustomException as err:
+        return err
     except Exception as err:
         return JSONResponse({'error': err}, status_code=500)

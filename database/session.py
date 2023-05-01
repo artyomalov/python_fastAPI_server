@@ -2,7 +2,7 @@
     """
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+# from basemodel import Todo
 BASE_URL = "sqlite:///./sql_app.db"
 # "postgresql://postgres:admin@localhost:5432/todos"
 

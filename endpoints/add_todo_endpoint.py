@@ -12,7 +12,7 @@ from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
 from models.Add_todo_request_body import AddTodoRequestBody
-
+from exceptions.custom_exeption import CustomException
 
 def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
     """_summary_
@@ -37,7 +37,7 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
         db.refresh(todo_request)
 
         if not todo_request:
-            raise CustomException('DB error', 501, )
+            raise CustomException('DB error')
 
         todos_count_data = calculate_pages_count(
             filter_value=filterValue,
@@ -66,6 +66,9 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
             }
         )
 
+    except CustomException as err:
+        return err
+    
     except Exception as err:
         return err
 
