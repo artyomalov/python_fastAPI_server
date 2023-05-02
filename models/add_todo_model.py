@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from todo_model import TodoModel
 
 
 class AddTodoRequestBody(BaseModel):
@@ -9,3 +10,4 @@ class AddTodoRequestBody(BaseModel):
     """
 
     text: str
+

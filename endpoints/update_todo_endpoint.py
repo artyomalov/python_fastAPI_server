@@ -6,9 +6,9 @@ from fastapi import Body
 from fastapi.responses import JSONResponse
 from database.basemodel import Todo
 from database.session import db
+from models.response_body_model import ResponseBodyModel
 
-
-def update_todo(id: int, body=Body()):
+def update_todo(id: int, body=Body()) -> ResponseBodyModel:
     """update edpoint for todo API
 
     Args:

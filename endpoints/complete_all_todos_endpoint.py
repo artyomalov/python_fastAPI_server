@@ -21,8 +21,9 @@ from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
 from utils.get_todos import get_todos
+from models.response_body_model import ResponseBodyModel
 
-def complete_all_todos(filterValue: str):
+def complete_all_todos(filterValue: str) -> ResponseBodyModel:
     """delete all completed todos endpoint
 
     Args:

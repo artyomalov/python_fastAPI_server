@@ -15,9 +15,9 @@ from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
 from exceptions.custom_exeption import CustomException
+from models.pagination_data_model import PaginationDataModel
 
-
-def delete_todo(id: int):
+def delete_todo(id: int) -> PaginationDataModel:
     """detete_todo_endpoint
 
     Args:

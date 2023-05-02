@@ -10,9 +10,9 @@ from sqlalchemy import desc
 from const import LIMIT, OFFSET_SIZE
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
+from models.response_body_model import ResponseBodyModel
 
-
-def get_todos(filterValue: str, pageNumber: int):
+def get_todos(filterValue: str, pageNumber: int) -> ResponseBodyModel:
     """get todos endpoint
 
     Args:

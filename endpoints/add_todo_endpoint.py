@@ -11,10 +11,11 @@ from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
-from models.Add_todo_request_body import AddTodoRequestBody
 from exceptions.custom_exeption import CustomException
+from models.response_body_model import ResponseBodyModel
+from models.add_todo_model import AddTodoRequestBody
 
-def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
+def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int) -> ResponseBodyModel:
     """_summary_
 
     Args:
@@ -28,7 +29,6 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
     Returns:
         _type_: _description_
     """
-    print(body.text)
     try:
         todo_request = Todo(text=body.text, completed=False)
 
@@ -56,8 +56,6 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
             'completed': todo_request.completed,
         }
 
-        print(new_todo)
-        print(pagination_data)
 
         return JSONResponse(
             {

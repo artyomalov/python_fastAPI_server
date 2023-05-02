@@ -14,9 +14,9 @@ from endpoints.get_todos_endpoint import get_todos
 from exceptions.custom_exeption import CustomException
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
+from models.response_body_model import ResponseBodyModel
 
-
-def delete_all_completed_todos(filterValue: str):
+def delete_all_completed_todos(filterValue: str) -> ResponseBodyModel:
     """delete all todos endpoint
 
     Args:
