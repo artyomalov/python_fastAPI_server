@@ -20,10 +20,10 @@ from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
-from utils.get_todos import get_todos
-from models.response_body_model import ResponseBodyModel
+from utils.get_todos_handler import get_todos_handler
 
-def complete_all_todos(filterValue: str) -> ResponseBodyModel:
+
+def complete_all_todos(filterValue: str):
     """delete all completed todos endpoint
 
     Args:
@@ -42,19 +42,16 @@ def complete_all_todos(filterValue: str) -> ResponseBodyModel:
     try:
         find_arg = get_find_arg(filter_value=filterValue)
 
-
         result = db.query(Todo).filter(Todo.completed == False).update(
             {"completed": True}, synchronize_session='fetch')
         db.commit()
         completed = True
 
-        
         if not result:
             result = db.query(Todo).filter(Todo.completed == True).update(
                 {'completed': False}, synchronize_session='fetch')
             db.commit()
             completed = False
-
 
         todos_count_data = calculate_pages_count(
             filter_value=filterValue,
@@ -65,14 +62,12 @@ def complete_all_todos(filterValue: str) -> ResponseBodyModel:
         some_todos_completed = todos_count_data['todos_total_count'] - \
             todos_count_data['active_todos_count'] > 0
 
-
-        todos_response = get_todos(
+        todos_response = get_todos_handler(
             find_arg=find_arg,
             data_base=db,
             model=Todo,
             skip_counter=todos_count_data['skip_counter']
         )
-
 
         pagination_data = {
             'todosTotalCount': todos_count_data['todos_total_count'],
@@ -86,7 +81,6 @@ def complete_all_todos(filterValue: str) -> ResponseBodyModel:
             'text': todo.text,
             'completed': todo.completed
         } for todo in todos_response]
-
 
         return {
             'todos': todos,

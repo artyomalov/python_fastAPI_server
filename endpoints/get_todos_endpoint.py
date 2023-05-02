@@ -6,13 +6,12 @@
 from database.session import db
 from database.basemodel import Todo
 from fastapi.responses import JSONResponse
-from sqlalchemy import desc
-from const import LIMIT, OFFSET_SIZE
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
-from models.response_body_model import ResponseBodyModel
+from utils.get_todos_handler import get_todos_handler
 
-def get_todos(filterValue: str, pageNumber: int) -> ResponseBodyModel:
+
+def get_todos(filterValue: str, pageNumber: int):
     """get todos endpoint
 
     Args:
@@ -41,7 +40,7 @@ def get_todos(filterValue: str, pageNumber: int) -> ResponseBodyModel:
             'someTodosCompleted': some_todos_completed
         }
 
-        todos_response = get_todos(
+        todos_response = get_todos_handler(
             find_arg=find_arg,
             data_base=db,
             model=Todo,
@@ -53,6 +52,7 @@ def get_todos(filterValue: str, pageNumber: int) -> ResponseBodyModel:
             'text': todo.text,
             'completed': todo.completed
         } for todo in todos_response]
+        # print(todos)
         return JSONResponse({
             'todos': todos,
             'paginationData': pagination_data

@@ -6,9 +6,9 @@ from fastapi import Body
 from fastapi.responses import JSONResponse
 from database.basemodel import Todo
 from database.session import db
-from models.response_body_model import ResponseBodyModel
 
-def update_todo(id: int, body=Body()) -> ResponseBodyModel:
+
+def update_todo(id: int, body=Body()):
     """update edpoint for todo API
 
     Args:
@@ -39,13 +39,12 @@ def update_todo(id: int, body=Body()) -> ResponseBodyModel:
         }
 
         active_todos_count = db.query(Todo).filter(
-            Todo.completed is False).count()
+            Todo.completed == False).count()
         pagination_data = {
             'activeTodosCount': active_todos_count
         }
-
         return JSONResponse({
-            'returnedTodo': returned_todo,
+            'todos': returned_todo,
             'paginationData': pagination_data
         })
     except Exception as err:

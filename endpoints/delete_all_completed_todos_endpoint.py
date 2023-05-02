@@ -10,13 +10,13 @@
 from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
-from endpoints.get_todos_endpoint import get_todos
+from utils.get_todos_handler import get_todos_handler
 from exceptions.custom_exeption import CustomException
 from utils.calculate_pages_count import calculate_pages_count
 from utils.get_find_arg import get_find_arg
-from models.response_body_model import ResponseBodyModel
 
-def delete_all_completed_todos(filterValue: str) -> ResponseBodyModel:
+
+def delete_all_completed_todos(filterValue: str):
     """delete all todos endpoint
 
     Args:
@@ -54,7 +54,7 @@ def delete_all_completed_todos(filterValue: str) -> ResponseBodyModel:
             'someTodosCompleted': some_todos_completed
         }
 
-        todos_response = get_todos(
+        todos_response = get_todos_handler(
             find_arg=find_arg,
             data_base=db,
             model=Todo,
@@ -66,8 +66,6 @@ def delete_all_completed_todos(filterValue: str) -> ResponseBodyModel:
             'text': todo.text,
             'completed': todo.completed
         } for todo in todos_response]
-
-        print(todos)
 
         return {
             'todos': todos,

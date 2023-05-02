@@ -12,10 +12,10 @@ from database.session import db
 from database.basemodel import Todo
 from utils.calculate_pages_count import calculate_pages_count
 from exceptions.custom_exeption import CustomException
-from models.response_body_model import ResponseBodyModel
 from models.add_todo_model import AddTodoRequestBody
 
-def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int) -> ResponseBodyModel:
+
+def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
     """_summary_
 
     Args:
@@ -56,22 +56,15 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int) -> Res
             'completed': todo_request.completed,
         }
 
-
         return JSONResponse(
             {
-                'returnedTodo': new_todo,
+                'todos': new_todo,
                 'paginationData': pagination_data
             }
         )
 
     except CustomException as err:
         return err
-    
+
     except Exception as err:
         return err
-
-    # try:
-    #     raise "Fuck"
-    # except CustomException as error:
-    #     # hadnle it
-    # except Exception as err:
