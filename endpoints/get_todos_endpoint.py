@@ -52,7 +52,8 @@ def get_todos(filterValue: str, pageNumber: int):
             'text': todo.text,
             'completed': todo.completed
         } for todo in todos_response]
-        # print(todos)
+        
+        
         return JSONResponse({
             'todos': todos,
             'paginationData': pagination_data

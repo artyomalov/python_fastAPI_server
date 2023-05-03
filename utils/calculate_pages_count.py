@@ -33,13 +33,13 @@ def calculate_pages_count(filter_value: str, page_number: int, data_base, model)
     active_todos_count = data_base.query(
         model).filter(model.completed == False).count()
     todos_count = todos_total_count
-    if filter_value != 'all':
-        todos_count = active_todos_count if filter_value == 'active' else data_base.query(
+    if filter_value is not 'all':
+        todos_count = active_todos_count if filter_value is 'active' else data_base.query(
             model).filter(model.completed == True).count()
 
     unrounded_count = todos_count / 5
 
-    pages_count = unrounded_count if unrounded_count % 5 == 0 else int(math.ceil(
+    pages_count = unrounded_count if unrounded_count % 5 is 0 else int(math.ceil(
         unrounded_count))
 
     skip_counter = int(page_number) - 1
@@ -57,7 +57,7 @@ def calculate_pages_count(filter_value: str, page_number: int, data_base, model)
         todos_count_data['skip_counter'] = skip_counter
 
     if int(page_number) > pages_count:
-        skip_counter = 0 if int(pages_count) == 0 else int(pages_count) - 1
+        skip_counter = 0 if int(pages_count) is 0 else int(pages_count) - 1
         todos_count_data['skip_counter'] = skip_counter
 
     return todos_count_data

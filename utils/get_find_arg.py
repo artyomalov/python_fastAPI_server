@@ -7,8 +7,8 @@ def get_find_arg(filter_value: str) -> bool | None:
     Returns:
         bool | None: True | False | None
     """
-    if filter_value == "completed":
+    if filter_value is "completed":
         return True
-    if filter_value == "active":
+    if filter_value is "active":
         return False
     return None
