@@ -1,5 +1,5 @@
 def get_find_arg(filter_value: str) -> bool | None:
-    """_summary_
+    """Returns True, False or None depending for filter value that can be all, completed or active
 
     Args:
         filter_value (str): value of filter that got from  query string

@@ -3,14 +3,7 @@ Returns:
     _type_: _description_
 """
 import math
-from pydantic import BaseModel
-
-
-class Counters(BaseModel):
-    skip_counter: int
-    pages_count: int
-    todos_total_count: int
-    active_todos_count: int
+from models.counters_model import Counters
 
 
 def calculate_pages_count(filter_value: str, page_number: int, data_base, model) -> Counters:
@@ -33,7 +26,7 @@ def calculate_pages_count(filter_value: str, page_number: int, data_base, model)
     active_todos_count = data_base.query(
         model).filter(model.completed == False).count()
     todos_count = todos_total_count
-    if filter_value != 'all':
+    if str(filter_value) != 'all':
         todos_count = active_todos_count if filter_value == 'active' else data_base.query(
             model).filter(model.completed == True).count()
 
@@ -51,7 +44,6 @@ def calculate_pages_count(filter_value: str, page_number: int, data_base, model)
         'active_todos_count': active_todos_count,
     }
     todos_count_data['skip_counter'] = skip_counter
-
     if pages_count <= 1:
         skip_counter = 0
         todos_count_data['skip_counter'] = skip_counter

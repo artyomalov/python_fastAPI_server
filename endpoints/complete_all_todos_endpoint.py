@@ -18,9 +18,9 @@
 from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
-from utils.calculate_pages_count import calculate_pages_count
-from utils.get_find_arg import get_find_arg
-from utils.get_todos_handler import get_todos_handler
+from utils.calculate_pages_count_servise import calculate_pages_count
+from utils.get_find_arg_servise import get_find_arg
+from utils.get_todos_servise import get_todos_handler
 
 
 def complete_all_todos(filterValue: str):

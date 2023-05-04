@@ -10,7 +10,7 @@
 from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
-from utils.calculate_pages_count import calculate_pages_count
+from utils.calculate_pages_count_servise import calculate_pages_count
 from exceptions.custom_exeption import CustomException
 from models.add_todo_model import AddTodoRequestBody
 
@@ -34,7 +34,6 @@ def add_todo(body: AddTodoRequestBody, filterValue: str, pageNumber: int):
 
         db.add(todo_request)
         db.commit()
-        db.refresh(todo_request)
 
         if not todo_request:
             raise CustomException('DB error')

@@ -13,7 +13,7 @@
 from fastapi.responses import JSONResponse
 from database.session import db
 from database.basemodel import Todo
-from utils.calculate_pages_count import calculate_pages_count
+from utils.calculate_pages_count_servise import calculate_pages_count
 from exceptions.custom_exeption import CustomException
 
 
