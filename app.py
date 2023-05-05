@@ -37,20 +37,3 @@ app.include_router(
 # app.include_router(user_router)
 # app.include_router(review_router)
 # app.include_router(item_router)
-
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
-
-# # @app.on_event("startup")
-# async def startup():
-#     await database.connect()  # creating connection to db. import db frpm db.base.py
-
-
-# @app.on_event("shutdown")
-# async def shutdown():
-#     await database.disconnect()  # closing connection to db
-
-
-# from sqlalchemy import desc
-# someselect.order_by(desc(table1.mycol))
